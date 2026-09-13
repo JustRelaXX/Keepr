@@ -1,0 +1,32 @@
+[package]
+name = "keepr"
+version = "0.1.2"
+description = "A little care for your home"
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/JustRelaXX/Keepr"
+homepage = "https://github.com/JustRelaXX/Keepr"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+keepr-core = { path = "../crates/keepr-core" }
+tauri = { version = "2", features = ["tray-icon", "image-png"] }
+notify-rust = "4"
+tauri-plugin-single-instance = "2"
+tauri-plugin-dialog = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+chrono = "0.4"
+tokio = { version = "1", features = ["sync", "time", "rt", "macros"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tracing-appender = "0.2"
+
+[target.'cfg(target_os = "linux")'.dependencies]
+zbus = { version = "5", default-features = false, features = ["tokio"] }
+futures-util = "0.3"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+tauri-plugin-autostart = "2"

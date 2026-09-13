@@ -1,0 +1,22 @@
+[package]
+name = "keepr-core"
+version = "0.1.2"
+description = "Domain logic and storage for the Keepr desktop app"
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/JustRelaXX/Keepr"
+
+[dependencies]
+chrono = { version = "0.4", features = ["serde"] }
+chrono-tz = "0.10"
+iana-time-zone = "0.1"
+rusqlite = { version = "0.38", features = ["bundled", "backup"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+uuid = { version = "1", features = ["v4"] }
+ts-rs = { version = "11", features = ["serde-compat"] }
+
+[dev-dependencies]
+tempfile = "3"
+proptest = "1"

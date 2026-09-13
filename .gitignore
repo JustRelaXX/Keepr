@@ -1,0 +1,10 @@
+node_modules/
+dist/
+target/
+src-tauri/gen/
+*.log
+*.db
+*.db-shm
+*.db-wal
+.DS_Store
+test-results/
