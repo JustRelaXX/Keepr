@@ -29,7 +29,9 @@ jobs:
       - run: cargo clippy --workspace --all-targets -- -D warnings
       - run: npm run check
       - run: npm test
-      - run: ./dist/aur/check.sh
+      - name: Validate AUR packaging
+        shell: bash
+        run: ./dist/aur/check.sh
       - run: npm run tauri build -- --debug --no-bundle
       - if: runner.os == 'Linux'
         run: dbus-run-session -- npm run test:e2e
