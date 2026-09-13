@@ -17,6 +17,6 @@ pkgbase = keepr-bin
 	depends = pango
 	depends = webkit2gtk-4.1
 	source_x86_64 = keepr-bin-0.1.4.deb::https://github.com/JustRelaXX/Keepr/releases/download/v0.1.4/Keepr_0.1.4_amd64.deb
-	sha256sums_x86_64 = REPLACE_WITH_REAL_SHA256_AFTER_FIRST_RELEASE
+	sha256sums_x86_64 = bf32de9d095213b2a32151f0cc0a95b4f8241812f09b093a37b073ea268d9cdf
 
 pkgname = keepr-bin

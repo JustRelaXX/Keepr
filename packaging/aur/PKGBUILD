@@ -11,7 +11,7 @@ optdepends=('libappindicator-gtk3: system tray icon')
 options=('!strip' '!debug')
 install=keepr-bin.install
 source_x86_64=("${pkgname}-${pkgver}.deb::${url}/releases/download/v${pkgver}/Keepr_${pkgver}_amd64.deb")
-sha256sums_x86_64=('REPLACE_WITH_REAL_SHA256_AFTER_FIRST_RELEASE')
+sha256sums_x86_64=('bf32de9d095213b2a32151f0cc0a95b4f8241812f09b093a37b073ea268d9cdf')
 package() {
   tar -xf data.tar.* -C "${pkgdir}"
 }
