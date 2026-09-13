@@ -504,6 +504,60 @@ fn still_imports_version_one_backups() {
     assert!(s.events(None, 100).unwrap().is_empty());
 }
 
+#[test]
+fn old_settings_json_parses_with_safe_defaults() {
+    // Databases written before tour_seen/demo_home existed must open with
+    // the tour reshown and no demo banner — never the reverse.
+    let raw = r#"{"language":"ru","theme":"system","pet":"plant","home_name":"","timezone":"UTC","reminder_time":"09:00","quiet_start":"22:00","quiet_end":"08:00","notifications":true,"onboarding_done":true}"#;
+    let s: Settings = serde_json::from_str(raw).unwrap();
+    assert!(!s.tour_seen);
+    assert!(!s.demo_home);
+}
+
+#[test]
+fn tour_seen_survives_save_and_reopen() {
+    let dir = tempfile::tempdir().unwrap();
+    let path = dir.path().join("home.db");
+    let mut s = Store::open(&path).unwrap();
+    assert!(!s.settings().unwrap().tour_seen);
+    let mut settings = s.settings().unwrap();
+    settings.tour_seen = true;
+    s.save_settings(settings, now()).unwrap();
+    drop(s);
+    let s = Store::open(&path).unwrap();
+    assert!(s.snapshot(now()).unwrap().settings.tour_seen);
+}
+
+#[test]
+fn demo_onboarding_flags_home_and_reset_clears_it() {
+    let mut s = Store::open(":memory:").unwrap();
+    let m = s.onboard(true, now()).unwrap();
+    assert!(m.snapshot.settings.demo_home);
+    assert!(m.snapshot.settings.onboarding_done);
+    assert!(!m.snapshot.items.is_empty());
+    assert!(!m.snapshot.rooms.is_empty());
+    let m = s.reset_home(now()).unwrap();
+    assert!(!m.snapshot.settings.demo_home);
+    assert!(m.snapshot.settings.onboarding_done);
+    assert!(m.snapshot.items.is_empty());
+    assert!(m.snapshot.rooms.is_empty());
+    assert!(m.snapshot.events.is_empty());
+    assert!(m.undo_id.is_none());
+    // Settings the user may have changed survive the reset.
+    assert_eq!(m.snapshot.settings.language, "ru");
+    assert!(s.reminders(now()).unwrap().0.is_empty());
+}
+
+#[test]
+fn reset_home_on_empty_home_is_a_clean_noop() {
+    let mut s = Store::open(":memory:").unwrap();
+    s.onboard(false, now()).unwrap();
+    let m = s.reset_home(now()).unwrap();
+    assert!(m.snapshot.items.is_empty());
+    assert!(m.snapshot.settings.onboarding_done);
+    assert!(!m.snapshot.settings.demo_home);
+}
+
 proptest! {
     #[test]
     fn positive_calendar_intervals_always_advance(days in 1u32..999,offset in 0i64..5000) {

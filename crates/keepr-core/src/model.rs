@@ -75,6 +75,11 @@ pub struct Settings {
     pub quiet_end: String,
     pub notifications: bool,
     pub onboarding_done: bool,
+    /// UI-only flags with serde defaults so pre-0.1.5 databases keep working.
+    #[serde(default)]
+    pub tour_seen: bool,
+    #[serde(default)]
+    pub demo_home: bool,
 }
 
 impl Default for Settings {
@@ -90,6 +95,8 @@ impl Default for Settings {
             quiet_end: "08:00".into(),
             notifications: true,
             onboarding_done: false,
+            tour_seen: false,
+            demo_home: false,
         }
     }
 }

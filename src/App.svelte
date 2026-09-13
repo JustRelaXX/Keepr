@@ -146,8 +146,9 @@
     };
   });
   async function onboard(demo: boolean) {
-    const result = await mutate('onboard', { demo }, '');
-    if (result && !demo) ui.editor = 'new';
+    // No auto-opened editor: the user lands on their home first and the
+    // first-run guide takes it from there.
+    await mutate('onboard', { demo }, '');
   }
 </script>
 

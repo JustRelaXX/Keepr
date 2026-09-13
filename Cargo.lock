@@ -1994,7 +1994,7 @@ dependencies = [
 
 [[package]]
 name = "keepr"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "chrono",
  "futures-util",
@@ -2016,7 +2016,7 @@ dependencies = [
 
 [[package]]
 name = "keepr-core"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "chrono",
  "chrono-tz",

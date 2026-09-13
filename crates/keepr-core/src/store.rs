@@ -563,6 +563,28 @@ impl Store {
             }
         }
         settings.onboarding_done = true;
+        settings.demo_home = demo;
+        tx.execute(
+            "UPDATE settings SET data=?1 WHERE id=1",
+            [serde_json::to_string(&settings)?],
+        )?;
+        tx.commit()?;
+        self.mutation(now, None, None)
+    }
+
+    /// Clears a demo (or any) home back to a clean slate: items, rooms,
+    /// history and pending notifications go away atomically. Settings —
+    /// language, theme, pet, reminder times — are preserved, as is the
+    /// completed onboarding. There is no undo; the UI confirms first.
+    pub fn reset_home(&mut self, now: DateTime<Utc>) -> Result<Mutation> {
+        let tx = self.conn.transaction()?;
+        tx.execute_batch(
+            "DELETE FROM notification_jobs; DELETE FROM events; DELETE FROM cycles; DELETE FROM objects; DELETE FROM rooms;",
+        )?;
+        let raw: String = tx.query_row("SELECT data FROM settings WHERE id=1", [], |r| r.get(0))?;
+        let mut settings: Settings = serde_json::from_str(&raw)?;
+        settings.demo_home = false;
+        dates::validate_settings(&settings)?;
         tx.execute(
             "UPDATE settings SET data=?1 WHERE id=1",
             [serde_json::to_string(&settings)?],

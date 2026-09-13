@@ -195,6 +195,11 @@ pub async fn onboard(
 }
 
 #[tauri::command]
+pub async fn reset_home(app: AppHandle, state: State<'_, AppState>) -> Result<Mutation, String> {
+    publish(&app, state.db.run(move |s| s.reset_home(Utc::now())).await).await
+}
+
+#[tauri::command]
 pub fn initial_route(state: State<'_, AppState>) -> Option<String> {
     state.pending_route.lock().ok()?.take()
 }

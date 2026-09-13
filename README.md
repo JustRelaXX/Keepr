@@ -53,6 +53,7 @@ is currently paused upstream, so it will be published once sign-ups reopen.
 
 - One-time and recurring items: days, weeks, calendar months and years.
 - First-run guide that walks through the home screen; replayable from Settings.
+- Demo home with a one-click reset back to a clean home.
 - Quick add from 30 specific templates, or create your own.
 - Rooms with their own look, search, filters, sorting.
 - Complete today or backdate it; undo completion and deletion.

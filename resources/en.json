@@ -191,7 +191,7 @@
   "backup_restored": "Home restored",
   "restore_title": "Restore your home from a backup?",
   "restore_body": "This will replace your current data. Keepr will first save a safety copy of your current home.",
-  "version": "Keepr 0.1.4 · Made with care",
+  "version": "Keepr 0.1.5 · Made with care",
   "quit": "Quit and stop reminders",
   "welcome": "Your home has a little keeper.",
   "welcome_body": "Filters, plants, your favorite things. Keepr remembers when they need care, so you can simply feel at home.",
@@ -257,5 +257,10 @@
   "tour_step4_title": "Rooms",
   "tour_step4_body": "Things live in rooms: bathroom, kitchen, bedroom. Peek in here to find anything fast.",
   "tour_step5_title": "Keepr works in the background",
-  "tour_step5_body": "Close the window freely: reminders arrive on their own. Quick actions live in the tray menu, autostart in Settings."
+  "tour_step5_body": "Close the window freely: reminders arrive on their own. Quick actions live in the tray menu, autostart in Settings.",
+  "demo_banner_body": "This is a demo home: feel free to poke around. When you're ready, start your own home fresh.",
+  "demo_reset": "Start a clean home",
+  "demo_reset_title": "Remove the demo home?",
+  "demo_reset_body": "All demo things, rooms and history will be deleted. Your settings — language, theme, pet and reminder times — are kept.",
+  "demo_cleared": "Demo cleared. The home is yours!"
 }

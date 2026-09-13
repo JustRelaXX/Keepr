@@ -96,9 +96,25 @@ try {
     await closeDialog();
     await click('.main-nav button:nth-child(3)');
     await screenshot('calendar-light');
+    await click('.main-nav button:nth-child(1)');
+    await until(()=>has('[data-testid=demo-banner]'),'demo banner');
+    await click('[data-testid=demo-reset]');
+    await until(()=>has('dialog[open]'),'reset confirm');
+    await click('[data-testid=demo-reset-confirm]');
+    await until(async()=>!await has('[data-testid=demo-banner]'),'demo cleared');
+    assert.equal(await execute('return document.querySelectorAll(".room-tile:not(.new-room)").length;'),0);
+    console.log('✓ demo home resets to a clean home');
     console.log('✓ real demo home and light-theme screenshots');
   } else {
   await click('[data-testid=start-empty]');
+  await until(()=>has('.tour-tooltip'),'first-run guide appears');
+  for(let i=0;i<4;i++){await click('[data-testid=tour-next]');await wait(250);}
+  assert.match(await execute('return document.querySelector(".tour-tooltip h2").textContent;'),/.+/);
+  await click('[data-testid=tour-done]');
+  await until(async()=>!await has('.tour-tooltip'),'guide finished');
+  console.log('✓ first-run guide walkthrough');
+
+  await click('[data-testid=add-item]');
   await click('.create-custom');
   await fill('[data-testid=item-name]','E2E water filter');
   await click('[data-testid=save-item]');
@@ -106,14 +122,6 @@ try {
   assert.match(await execute('return document.querySelector(".detail-hero").textContent;'),/E2E water filter/);
   await closeDialog();
   console.log('✓ create recurring item through real IPC');
-
-  await until(()=>has('.tour-tooltip'),'first-run guide appears');
-  for(let i=0;i<4;i++){await click('[data-testid=tour-next]');await wait(250);}
-  assert.match(await execute('return document.querySelector(".tour-tooltip h2").textContent;'),/.+/);
-  await click('[data-testid=tour-done]');
-  await until(async()=>!await has('.tour-tooltip'),'guide finished');
-  assert.equal(await execute('return localStorage.getItem("keepr.tour.v1");'),'done');
-  console.log('✓ first-run guide walkthrough');
 
   await click('.main-nav button:nth-child(2)');
   await until(()=>has('.item-card'),'item list');
@@ -180,6 +188,13 @@ try {
   assert.match(await execute('return document.querySelector(".item-card").textContent;'),/E2E water filter/);
   assert.ok(await has('.snoozed'));
   console.log('✓ full process restart preserves SQLite data');
+
+  await click('.main-nav button:nth-child(1)');
+  await wait(2000);
+  assert.ok(!await has('.tour-tooltip'),'guide stays finished after restart');
+  console.log('✓ guide completion survives restart');
+  await click('.main-nav button:nth-child(2)');
+  await until(()=>has('.item-card'),'back to objects');
 
   await click('.item-main');
   await click('[data-testid=delete-item]');

@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { ui, navigate } from '../lib/state.svelte';
+  import { ui, navigate, mutate } from '../lib/state.svelte';
   import { t, formatDate } from '../lib/i18n.svelte';
   import Pet from '../lib/ui/Pet.svelte';
   import Icon from '../lib/ui/Icon.svelte';
   import ItemCard from '../lib/ui/ItemCard.svelte';
   import ThingArt from '../lib/ui/ThingArt.svelte';
+  import Modal from '../lib/ui/Modal.svelte';
   const snapshot = $derived(ui.snapshot!);
   const urgent = $derived(
     snapshot.items.filter((v) => !v.item.completed && v.days_left <= 0),
@@ -14,7 +15,25 @@
       .filter((v) => !v.item.completed && v.days_left > 0)
       .slice(0, 4),
   );
+  let showReset = $state(false);
+  async function resetDemo() {
+    if (await mutate('reset_home', {}, 'demo_cleared')) showReset = false;
+  }
 </script>
+
+{#if snapshot.settings.demo_home}
+  <div class="demo-banner" data-testid="demo-banner">
+    <span class="demo-banner-copy"
+      ><Icon name="sparkles" size={18} />{t('demo_banner_body')}</span
+    >
+    <button
+      type="button"
+      class="button secondary"
+      data-testid="demo-reset"
+      onclick={() => (showReset = true)}>{t('demo_reset')}</button
+    >
+  </div>
+{/if}
 
 <div class="dashboard-top">
   <section class="health-panel" aria-label={t('home_health')}>
@@ -171,3 +190,19 @@
     </div>
   </aside>
 </div>
+{#if showReset}<Modal title={t('demo_reset_title')} onclose={() => (showReset = false)}
+  ><p class="muted">{t('demo_reset_body')}</p>
+  <div class="form-footer">
+    <button
+      type="button"
+      class="button secondary"
+      onclick={() => (showReset = false)}>{t('cancel')}</button
+    ><button
+      type="button"
+      class="button danger"
+      disabled={ui.busy}
+      data-testid="demo-reset-confirm"
+      onclick={resetDemo}>{t('demo_reset')}</button
+    >
+  </div></Modal
+>{/if}

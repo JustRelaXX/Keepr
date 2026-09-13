@@ -5,8 +5,6 @@ export interface TourStep {
   bodyKey: string;
 }
 
-export const TOUR_KEY = 'keepr.tour.v1';
-
 /** Pure step list so it stays unit-testable without a DOM. */
 export function buildSteps(hasItems: boolean): TourStep[] {
   return [

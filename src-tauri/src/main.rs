@@ -105,6 +105,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
             commands::delete_room,
             commands::save_settings,
             commands::onboard,
+            commands::reset_home,
             commands::initial_route,
             commands::autostart_status,
             commands::set_autostart,

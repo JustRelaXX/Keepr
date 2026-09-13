@@ -635,9 +635,32 @@
     font-size: 22px;
     font-weight: 500;
   }
+  .demo-banner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    background: var(--yellow-bg);
+    border: 1px dashed var(--soft-text);
+    border-radius: 14px;
+    padding: 13px 16px;
+    margin-bottom: 18px;
+    font-size: 12px;
+  }
+  .demo-banner-copy {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1.6;
+  }
+  .demo-banner .button {
+    min-height: 34px;
+    font-size: 11px;
+  }
   .dashboard-top {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 206px;
+    display: grid;    grid-template-columns: minmax(0, 1fr) 206px;
     gap: 18px;
   }
   .health-panel {
