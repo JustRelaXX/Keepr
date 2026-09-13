@@ -2345,10 +2345,12 @@
     margin-left: 5px;
   }
   .tour-dim {
+    /* Full-screen dim ONLY for the centered finale (no target, no cut-out
+       needed) — never stacked with .tour-spot, so no double-dimming. */
     position: fixed;
     inset: 0;
     z-index: 60;
-    background: rgb(20 26 20 / 0.45);
+    background: rgb(20 26 20 / 0.55);
     pointer-events: none;
   }
   .tour-spot {
@@ -2357,7 +2359,9 @@
     border-radius: 16px;
     outline: 2px solid var(--focus);
     outline-offset: 0;
-    box-shadow: 0 0 0 9999px rgb(20 26 20 / 0.45);
+    /* The shadow IS the dimmer: everything outside the spot goes dark,
+       the spot itself stays bright like a mask cut-out. */
+    box-shadow: 0 0 0 9999px rgb(20 26 20 / 0.55);
     pointer-events: none;
     transition:
       left 0.25s ease,

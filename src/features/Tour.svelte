@@ -97,7 +97,6 @@
 <svelte:window onkeydown={onKey} onresize={onResize} />
 
 {#if tour.open && step}
-  <div class="tour-dim" aria-hidden="true"></div>
   {#if spot}<div
       class="tour-spot"
       aria-hidden="true"
@@ -105,7 +104,7 @@
       style:top="{spot.y - 8}px"
       style:width="{spot.w + 16}px"
       style:height="{spot.h + 16}px"
-    ></div>{/if}
+    ></div>{:else}<div class="tour-dim" aria-hidden="true"></div>{/if}
   <div
     class="tour-tooltip"
     role="dialog"
@@ -126,8 +125,7 @@
     <h2 bind:this={heading} tabindex="-1">{t(step.titleKey)}</h2>
     <p>{t(step.bodyKey)}</p>
     <div class="tour-dots" aria-hidden="true">
-      {#each steps as _, i}<span class:filled={i <= tour.step}></span
-      >{/each}
+      {#each steps as _, i}<span class:filled={i <= tour.step}></span>{/each}
     </div>
     <div class="tour-actions">
       <button
