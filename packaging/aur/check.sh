@@ -18,4 +18,16 @@ app_version="$(python3 -c "import json;print(json.load(open('../../src-tauri/tau
 grep -q "releases/download/v\${pkgver}/Keepr_\${pkgver}_amd64.deb" PKGBUILD \
   || { echo "source URL does not track pkgver"; exit 1; }
 
+# The checksum is either the published release hash (64 hex chars) or the
+# documented placeholder used between cutting a version and publishing it.
+sha_pkgbuild="$(grep -E "^sha256sums_x86_64=" PKGBUILD | grep -o "'[^']*'" | tr -d "'")"
+sha_srcinfo="$(grep -P '^\tsha256sums_x86_64 = ' .SRCINFO | awk '{print $3}')"
+[ "$sha_pkgbuild" = "$sha_srcinfo" ] \
+  || { echo "sha256 mismatch between PKGBUILD and .SRCINFO"; exit 1; }
+case "$sha_pkgbuild" in
+  REPLACE_WITH_REAL_SHA256_AFTER_FIRST_RELEASE) echo "note: checksum placeholder (release not published yet)" ;;
+  *) echo "$sha_pkgbuild" | grep -Eq '^[0-9a-f]{64}$' \
+       || { echo "sha256 is neither placeholder nor valid hash"; exit 1; } ;;
+esac
+
 echo "AUR packaging OK (keepr-bin $pkgver_pkgbuild)"

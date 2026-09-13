@@ -20,8 +20,8 @@ Grab the latest release from
 |----|------|----------------|
 | Fedora / RHEL | `Keepr_*_x86_64.rpm` | `sudo dnf install ./Keepr_*.rpm` |
 | Ubuntu / Debian | `Keepr_*_amd64.deb` | `sudo apt install ./Keepr_*.deb` |
-| Arch Linux | AUR `keepr-bin` | `yay -S keepr-bin` or `paru -S keepr-bin` |
-| Any Linux | `Keepr_*.AppImage` | `chmod +x Keepr_*.AppImage && ./Keepr_*.AppImage` |
+| Arch Linux | `Keepr_*.AppImage` (recommended) | `chmod +x Keepr_*.AppImage && ./Keepr_*.AppImage` (install `fuse2` if it won't start) |
+| Any other Linux | `Keepr_*.AppImage` | Same as above |
 | Windows 10/11 | `Keepr_*_x64-setup.exe` | Run the installer (WebView2 is preinstalled on most systems) |
 
 After installing, enable *“Be there when you sign in”* in Settings for
@@ -30,6 +30,18 @@ window keeps reminders running.
 
 > Note: on GNOME without an AppIndicator extension, third-party tray icons may
 > not be shown. Keepr stays available via the app launcher.
+
+Alternative install methods on Arch Linux (no AUR account needed):
+
+```sh
+# Build a native package straight from this repo:
+git clone https://github.com/JustRelaXX/Keepr.git
+cd Keepr/packaging/aur
+makepkg -si
+```
+
+An AUR package (`keepr-bin`, via `yay`/`paru`) is planned — AUR registration
+is currently paused upstream, so it will be published once sign-ups reopen.
 
 ![Home dashboard](docs/screenshots/home-light.png)
 ![All things](docs/screenshots/things-light.png)

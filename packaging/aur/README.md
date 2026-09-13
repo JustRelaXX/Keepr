@@ -9,9 +9,10 @@ no compilation on the user's machine.
 
 ```sh
 git clone ssh://aur@aur.archlinux.org/keepr-bin.git
-cp dist/aur/PKGBUILD dist/aur/keepr-bin.install dist/aur/.SRCINFO keepr-bin/
+cp packaging/aur/PKGBUILD packaging/aur/keepr-bin.install packaging/aur/.SRCINFO keepr-bin/
 cd keepr-bin
-# Fill in the real sha256 of the released .deb first (see below), then:
+# The sha256 in PKGBUILD already matches the published .deb of the current
+# release. For a NEW release, update it from the aur-bump artifact first.
 makepkg --printsrcinfo > .SRCINFO
 makepkg -si   # test install locally
 git add PKGBUILD keepr-bin.install .SRCINFO

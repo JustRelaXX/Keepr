@@ -19,8 +19,8 @@ English version: [README.md](README.md).
 |----|------|----------------|
 | Fedora / RHEL | `Keepr_*_x86_64.rpm` | `sudo dnf install ./Keepr_*.rpm` |
 | Ubuntu / Debian | `Keepr_*_amd64.deb` | `sudo apt install ./Keepr_*.deb` |
-| Arch Linux | AUR `keepr-bin` | `yay -S keepr-bin` или `paru -S keepr-bin` |
-| Любой Linux | `Keepr_*.AppImage` | `chmod +x Keepr_*.AppImage && ./Keepr_*.AppImage` |
+| Arch Linux | `Keepr_*.AppImage` (рекомендуется) | `chmod +x Keepr_*.AppImage && ./Keepr_*.AppImage` (если не запускается — `sudo pacman -S fuse2`) |
+| Любой другой Linux | `Keepr_*.AppImage` | Так же, как выше |
 | Windows 10/11 | `Keepr_*_x64-setup.exe` | Запустить установщик (WebView2 обычно уже есть) |
 
 После установки включи в настройках *«Встречать тебя при входе в систему»*,
@@ -29,6 +29,18 @@ English version: [README.md](README.md).
 
 > В GNOME без расширения AppIndicator иконки сторонних приложений в трее могут
 > не отображаться. Keepr остаётся доступен через launcher.
+
+Альтернативная установка в Arch Linux (аккаунт AUR не нужен):
+
+```sh
+# Собрать нативный пакет прямо из этого репозитория:
+git clone https://github.com/JustRelaXX/Keepr.git
+cd Keepr/packaging/aur
+makepkg -si
+```
+
+AUR-пакет (`keepr-bin` через `yay`/`paru`) запланирован — регистрация в AUR
+сейчас приостановлена на их стороне, опубликуем, как только её откроют.
 
 ![Дом](docs/screenshots/home-light.png)
 ![Все вещи](docs/screenshots/things-light.png)
