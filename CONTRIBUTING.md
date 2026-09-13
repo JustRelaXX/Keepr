@@ -40,6 +40,19 @@ npm run test:e2e
 Releases are cut from tags (`v*`) by `.github/workflows/release.yml` and are
 maintainer-only. Do not bump versions in feature PRs.
 
+Maintainer checklist:
+
+1. Bump the version in `src-tauri/tauri.conf.json`, `package.json`,
+   `src-tauri/Cargo.toml`, `crates/keepr-core/Cargo.toml` and the `version`
+   strings in `resources/ru.json` / `resources/en.json` (all must match —
+   CI enforces this).
+2. Add `docs/releases/<version>.md` release notes.
+3. Update `pkgver` in `dist/aur/PKGBUILD` (the `.SRCINFO` follows after the
+   release, using the `aur-bump` artifact for the real checksum).
+4. Commit, push, then `git tag v<version> && git push origin v<version>`.
+5. Verify the GitHub Release assets install (`.rpm`/`.deb` locally, Windows
+   `.exe` smoke test), then update the AUR package.
+
 ## Questions
 
 Open a [Discussion](https://github.com/JustRelaXX/Keepr/discussions) for

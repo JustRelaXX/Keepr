@@ -1,0 +1,156 @@
+name: Release
+
+# Cut a release by pushing a tag like `v0.1.2`.
+# The tag MUST match the versions in src-tauri/tauri.conf.json, package.json
+# and both Cargo.toml files (enforced by the check-version job).
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  check-version:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tag matches packaged versions
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          python3 - "$TAG" <<'EOF'
+          import json, re, sys
+          tag = sys.argv[1]
+          assert re.fullmatch(r'\d+\.\d+\.\d+', tag), f"bad tag: {tag}"
+          conf = json.load(open('src-tauri/tauri.conf.json'))['version']
+          pkg = json.load(open('package.json'))['version']
+          def cargo(path):
+              for line in open(path):
+                  m = re.match(r'version\s*=\s*"([^"]+)"', line)
+                  if m:
+                      return m.group(1)
+              raise AssertionError(f"no version in {path}")
+          versions = {
+              'tag': tag,
+              'tauri.conf.json': conf,
+              'package.json': pkg,
+              'src-tauri/Cargo.toml': cargo('src-tauri/Cargo.toml'),
+              'crates/keepr-core/Cargo.toml': cargo('crates/keepr-core/Cargo.toml'),
+          }
+          assert len(set(versions.values())) == 1, f"version mismatch: {versions}"
+          print("versions OK:", tag)
+          EOF
+
+  linux:
+    needs: check-version
+    # ubuntu-22.04 (not 24.04): older glibc, so the bundles install and run
+    # on more distributions.
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: >
+          sudo apt-get update && sudo apt-get install -y
+          libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev
+          libxdo-dev libssl-dev build-essential curl wget file
+      - run: npm ci
+      - run: npm run tauri build -- --bundles deb,rpm,appimage
+      - name: Collect bundles
+        run: |
+          mkdir -p dist-release
+          cp target/release/bundle/deb/*.deb \
+             target/release/bundle/rpm/*.rpm \
+             target/release/bundle/appimage/*.AppImage dist-release/
+          ls -la dist-release/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-bundles
+          path: dist-release/
+
+  windows:
+    needs: check-version
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: npm ci
+      - run: npm run tauri build -- --bundles nsis
+      - name: Collect bundles
+        shell: bash
+        run: |
+          mkdir -p dist-release
+          cp target/release/bundle/nsis/*.exe dist-release/
+          ls -la dist-release/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-bundles
+          path: dist-release/
+
+  publish:
+    needs: [linux, windows]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+          path: dist-release
+      - name: Checksums and release notes
+        id: prep
+        run: |
+          cd dist-release
+          sha256sum -- * > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+          TAG="${GITHUB_REF_NAME#v}"
+          if [ -f "../docs/releases/${TAG}.md" ]; then
+            echo "notes=--notes-file" >> "$GITHUB_OUTPUT"
+            echo "file=../docs/releases/${TAG}.md" >> "$GITHUB_OUTPUT"
+          else
+            echo "notes=--generate-notes" >> "$GITHUB_OUTPUT"
+            echo "file=" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd dist-release
+          if [ -n "${{ steps.prep.outputs.file }}" ]; then
+            gh release create "${GITHUB_REF_NAME}" \
+              --title "Keepr ${GITHUB_REF_NAME}" \
+              --notes-file "${{ steps.prep.outputs.file }}" *
+          else
+            gh release create "${GITHUB_REF_NAME}" \
+              --title "Keepr ${GITHUB_REF_NAME}" \
+              --generate-notes *
+          fi
+      - name: AUR bump instructions
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          DEB="$(ls dist-release/Keepr_*_amd64.deb)"
+          SUM="$(sha256sum "$DEB" | cut -d' ' -f1)"
+          {
+            echo "## AUR update for keepr-bin (${GITHUB_REF_NAME})"
+            echo ""
+            echo "In the AUR repo, set in \`PKGBUILD\` and regenerate \`.SRCINFO\` (see \`dist/aur/README.md\`):"
+            echo ""
+            echo '```'
+            echo "pkgver=${TAG}"
+            echo "pkgrel=1"
+            echo "sha256sums_x86_64=('${SUM}')"
+            echo '```'
+          } | tee aur-bump.txt >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aur-bump
+          path: aur-bump.txt
