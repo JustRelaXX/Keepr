@@ -586,6 +586,16 @@
     align-items: center;
     gap: 9px;
     color: var(--soft-text);
+    border-radius: 10px;
+    padding: 4px 10px;
+  }
+  .search-field:focus-within {
+    outline: 2px solid var(--focus);
+    outline-offset: 1px;
+  }
+  .search-field input:focus,
+  .search-field input:focus-visible {
+    outline: none;
   }
   .search-field input {
     background: transparent;
@@ -660,7 +670,8 @@
     font-size: 11px;
   }
   .dashboard-top {
-    display: grid;    grid-template-columns: minmax(0, 1fr) 206px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 206px;
     gap: 18px;
   }
   .health-panel {
@@ -1222,21 +1233,6 @@
   .upcoming > .text-button {
     font-size: 10px;
     margin-top: 9px;
-  }
-  .home-note {
-    margin-top: 35px;
-    padding: 22px 12px;
-    text-align: center;
-    border: 1px dashed var(--border);
-    border-radius: 13px;
-    color: var(--soft-text);
-  }
-  .home-note > p {
-    font-size: 10px;
-    margin-top: 8px;
-  }
-  .home-note > small {
-    font-size: 8px;
   }
   .peaceful {
     text-align: center;
@@ -2777,9 +2773,6 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 0 20px;
-    }
-    .home-note {
-      display: none;
     }
     .room-tiles {
       grid-template-columns: repeat(4, minmax(0, 1fr));

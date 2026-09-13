@@ -183,26 +183,23 @@
     <button class="text-button" onclick={() => navigate('calendar')}
       >{t('calendar')}<Icon name="arrow" size={16} /></button
     >
-    <div class="home-note">
-      <Icon name="shield" size={22} />
-      <p>{t('offline')}</p>
-      <small>{t('local_only')}</small>
-    </div>
   </aside>
 </div>
-{#if showReset}<Modal title={t('demo_reset_title')} onclose={() => (showReset = false)}
-  ><p class="muted">{t('demo_reset_body')}</p>
-  <div class="form-footer">
-    <button
-      type="button"
-      class="button secondary"
-      onclick={() => (showReset = false)}>{t('cancel')}</button
-    ><button
-      type="button"
-      class="button danger"
-      disabled={ui.busy}
-      data-testid="demo-reset-confirm"
-      onclick={resetDemo}>{t('demo_reset')}</button
-    >
-  </div></Modal
->{/if}
+{#if showReset}<Modal
+    title={t('demo_reset_title')}
+    onclose={() => (showReset = false)}
+    ><p class="muted">{t('demo_reset_body')}</p>
+    <div class="form-footer">
+      <button
+        type="button"
+        class="button secondary"
+        onclick={() => (showReset = false)}>{t('cancel')}</button
+      ><button
+        type="button"
+        class="button danger"
+        disabled={ui.busy}
+        data-testid="demo-reset-confirm"
+        onclick={resetDemo}>{t('demo_reset')}</button
+      >
+    </div></Modal
+  >{/if}
