@@ -1,6 +1,6 @@
 [package]
 name = "keepr-core"
-version = "0.1.2"
+version = "0.1.3"
 description = "Domain logic and storage for the Keepr desktop app"
 edition = "2021"
 license = "MIT"

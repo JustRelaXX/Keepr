@@ -23,6 +23,8 @@
   import ItemEditor from './features/ItemEditor.svelte';
   import ItemDetails from './features/ItemDetails.svelte';
   import RoomEditor from './features/RoomEditor.svelte';
+  import Tour from './features/Tour.svelte';
+  import { startTour, isTourSeen, tour } from './lib/tour.svelte';
   import logo from '../resources/artwork/icon.svg';
 
   let search = $state<HTMLInputElement>();
@@ -74,6 +76,21 @@
     document.documentElement.dataset.theme =
       theme === 'system' ? (systemDark ? 'dark' : 'light') : theme;
     document.documentElement.lang = locale.language;
+  });
+  $effect(() => {
+    // First-run guide: once, on a quiet home dashboard. The tour.open guard
+    // also keeps background refreshes from resetting an ongoing tour.
+    if (
+      !tour.open &&
+      ui.snapshot?.settings.onboarding_done &&
+      !isTourSeen() &&
+      ui.page === 'home' &&
+      !ui.editor &&
+      !ui.roomEditor &&
+      !ui.selected
+    ) {
+      startTour();
+    }
   });
   function keyboard(e: KeyboardEvent) {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
@@ -332,6 +349,9 @@
   </main>
 {/if}
 {#if ui.selected && !ui.editor}<ItemDetails />{/if}
+{#if tour.open && ui.snapshot?.settings.onboarding_done}<Tour
+    hasItems={(ui.snapshot?.items.length ?? 0) > 0}
+/>{/if}
 {#if ui.editor}{#key ui.editor}<ItemEditor />{/key}{/if}
 {#if ui.roomEditor}{#key ui.roomEditor}<RoomEditor />{/key}{/if}
 {#if ui.toast}<div

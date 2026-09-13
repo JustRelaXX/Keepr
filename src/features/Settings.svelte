@@ -1,7 +1,15 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { invoke } from '@tauri-apps/api/core';
-  import { ui, mutate, notify, report, load } from '../lib/state.svelte';
+  import {
+    ui,
+    mutate,
+    notify,
+    report,
+    load,
+    navigate,
+  } from '../lib/state.svelte';
+  import { startTour } from '../lib/tour.svelte';
   import { t } from '../lib/i18n.svelte';
   import type { Mutation } from '../lib/generated/Mutation';
   import Icon from '../lib/ui/Icon.svelte';
@@ -226,6 +234,16 @@
       <div class="shortcut-row">
         <span>{t('shortcut_close')}</span><kbd>Esc</kbd>
       </div>
+      <button
+        type="button"
+        class="text-button full-width"
+        onclick={() => {
+          navigate('home');
+          startTour();
+        }}
+        data-testid="replay-tour"
+        ><Icon name="help" size={17} />{t('tour_replay')}</button
+      >
     </section>
     <p class="version">{t('version')}</p>
   </aside>

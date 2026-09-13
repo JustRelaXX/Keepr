@@ -1,6 +1,6 @@
 pkgbase = keepr-bin
 	pkgdesc = Local-first desktop companion for home care reminders
-	pkgver = 0.1.2
+	pkgver = 0.1.3
 	pkgrel = 1
 	url = https://github.com/JustRelaXX/Keepr
 	install = keepr-bin.install
@@ -16,7 +16,7 @@ pkgbase = keepr-bin
 	depends = libsoup
 	depends = pango
 	depends = webkit2gtk-4.1
-	source_x86_64 = keepr-bin-0.1.2.deb::https://github.com/JustRelaXX/Keepr/releases/download/v0.1.2/Keepr_0.1.2_amd64.deb
-	sha256sums_x86_64 = e358f5546db961b92bf9a120988f9157f3baf2e4856c765bf08588453aecaf3c
+	source_x86_64 = keepr-bin-0.1.3.deb::https://github.com/JustRelaXX/Keepr/releases/download/v0.1.3/Keepr_0.1.3_amd64.deb
+	sha256sums_x86_64 = REPLACE_WITH_REAL_SHA256_AFTER_FIRST_RELEASE
 
 pkgname = keepr-bin

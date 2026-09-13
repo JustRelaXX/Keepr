@@ -69,6 +69,7 @@ async function start(){
 }
 async function stop(){if(session){await request('DELETE',`/session/${session}`);session=null;await wait(600);}}
 async function closeDialog(){await click('dialog[open] .modal-header .icon-button');await until(async()=>!await has('dialog[open]'),'dialog closes');}
+async function dismissTour(){for(let i=0;i<50&&!await has('.tour-tooltip');i++)await wait(100);if(await has('.tour-tooltip'))await click('[data-testid=tour-skip]');await until(async()=>!await has('.tour-tooltip'),'guide dismissed');}
 
 try {
   await until(async()=>{try{await request('GET','/status');return true;}catch{return false;}},'WebKitWebDriver');
@@ -77,6 +78,7 @@ try {
   if(process.argv.includes('--demo')) {
     await click('[data-testid=start-demo]');
     await until(()=>has('.health-panel'),'demo home');
+    await dismissTour();
     await click('.settings-nav');
     await until(()=>has('.settings-layout'),'settings');
     await execute(`const select=document.querySelectorAll('.settings-layout select')[1];select.value='light';select.dispatchEvent(new Event('change',{bubbles:true}));`);
@@ -104,6 +106,14 @@ try {
   assert.match(await execute('return document.querySelector(".detail-hero").textContent;'),/E2E water filter/);
   await closeDialog();
   console.log('✓ create recurring item through real IPC');
+
+  await until(()=>has('.tour-tooltip'),'first-run guide appears');
+  for(let i=0;i<4;i++){await click('[data-testid=tour-next]');await wait(250);}
+  assert.match(await execute('return document.querySelector(".tour-tooltip h2").textContent;'),/.+/);
+  await click('[data-testid=tour-done]');
+  await until(async()=>!await has('.tour-tooltip'),'guide finished');
+  assert.equal(await execute('return localStorage.getItem("keepr.tour.v1");'),'done');
+  console.log('✓ first-run guide walkthrough');
 
   await click('.main-nav button:nth-child(2)');
   await until(()=>has('.item-card'),'item list');
@@ -222,6 +232,14 @@ try {
   await clickText('.main-nav button','My home');
   await screenshot('dashboard-dark');
   console.log('✓ dark theme and English localization');
+
+  await click('.settings-nav');
+  await until(()=>has('.settings-layout'),'settings again');
+  await click('[data-testid=replay-tour]');
+  await until(()=>has('.tour-tooltip'),'guide replayed from settings');
+  await click('[data-testid=tour-skip]');
+  await until(async()=>!await has('.tour-tooltip'),'replay dismissed');
+  console.log('✓ guide replay from settings');
   }
   await stop();
   const resident=spawn(binary,['--background'],{env,stdio:'ignore'});

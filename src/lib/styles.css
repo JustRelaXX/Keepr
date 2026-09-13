@@ -2344,6 +2344,81 @@
   .toast .icon-button {
     margin-left: 5px;
   }
+  .tour-dim {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    background: rgb(20 26 20 / 0.45);
+    pointer-events: none;
+  }
+  .tour-spot {
+    position: fixed;
+    z-index: 60;
+    border-radius: 16px;
+    outline: 2px solid var(--focus);
+    outline-offset: 0;
+    box-shadow: 0 0 0 9999px rgb(20 26 20 / 0.45);
+    pointer-events: none;
+    transition:
+      left 0.25s ease,
+      top 0.25s ease,
+      width 0.25s ease,
+      height 0.25s ease;
+  }
+  .tour-tooltip {
+    position: fixed;
+    z-index: 61;
+    width: 320px;
+    max-width: calc(100vw - 24px);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 16px 60px #0004;
+    padding: 18px 18px 16px;
+    animation: dialog-in 0.18s ease-out;
+  }
+  .tour-tooltip .tour-skip {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+  }
+  .tour-progress {
+    display: block;
+    margin-bottom: 8px;
+    padding-right: 28px;
+  }
+  .tour-tooltip h2 {
+    font-size: 16px;
+    margin-bottom: 8px;
+    outline: none;
+  }
+  .tour-tooltip p {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .tour-dots {
+    display: flex;
+    gap: 5px;
+    margin: 14px 0;
+  }
+  .tour-dots > span {
+    height: 5px;
+    flex: 1;
+    border-radius: 3px;
+    background: var(--surface-alt);
+  }
+  .tour-dots > span.filled {
+    background: var(--good);
+  }
+  .tour-actions {
+    display: flex;
+    gap: 8px;
+  }
+  .tour-actions .button {
+    flex: 1;
+    min-height: 36px;
+    font-size: 11px;
+  }
   :root[data-theme='dark'] .health-panel {
     background: #2d3d29;
     border-color: #3b4c32;
