@@ -1,0 +1,17 @@
+# Maintainer: JustRelaXX <https://github.com/JustRelaXX>
+pkgname=keepr-bin
+pkgver=0.1.2
+pkgrel=1
+pkgdesc="Local-first desktop companion for home care reminders"
+arch=('x86_64')
+url="https://github.com/JustRelaXX/Keepr"
+license=('MIT')
+depends=('cairo' 'desktop-file-utils' 'gdk-pixbuf2' 'glib2' 'gtk3' 'hicolor-icon-theme' 'libsoup' 'pango' 'webkit2gtk-4.1')
+optdepends=('libappindicator-gtk3: system tray icon')
+options=('!strip' '!debug')
+install=keepr-bin.install
+source_x86_64=("${pkgname}-${pkgver}.deb::${url}/releases/download/v${pkgver}/Keepr_${pkgver}_amd64.deb")
+sha256sums_x86_64=('REPLACE_WITH_REAL_SHA256_AFTER_FIRST_RELEASE')
+package() {
+  tar -xf data.tar.* -C "${pkgdir}"
+}

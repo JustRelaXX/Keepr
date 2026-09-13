@@ -47,7 +47,7 @@ Maintainer checklist:
    strings in `resources/ru.json` / `resources/en.json` (all must match —
    CI enforces this).
 2. Add `docs/releases/<version>.md` release notes.
-3. Update `pkgver` in `dist/aur/PKGBUILD` (the `.SRCINFO` follows after the
+3. Update `pkgver` in `packaging/aur/PKGBUILD` (the `.SRCINFO` follows after the
    release, using the `aur-bump` artifact for the real checksum).
 4. Commit, push, then `git tag v<version> && git push origin v<version>`.
 5. Verify the GitHub Release assets install (`.rpm`/`.deb` locally, Windows

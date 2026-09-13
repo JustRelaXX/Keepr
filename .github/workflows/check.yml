@@ -31,7 +31,7 @@ jobs:
       - run: npm test
       - name: Validate AUR packaging
         shell: bash
-        run: ./dist/aur/check.sh
+        run: ./packaging/aur/check.sh
       - run: npm run tauri build -- --debug --no-bundle
       - if: runner.os == 'Linux'
         run: dbus-run-session -- npm run test:e2e

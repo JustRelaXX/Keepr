@@ -108,7 +108,7 @@ and internals in [docs/architecture.md](docs/architecture.md).
 - `src-tauri/` — IPC commands, tray, notifications, autostart, background worker.
 - `resources/` — shared RU/EN strings, presets, artwork.
 - `docs/` — architecture, platform notes, QA log, release notes.
-- `dist/aur/` — AUR packaging sources (`keepr-bin`).
+- `packaging/aur/` — AUR packaging sources (`keepr-bin`).
 
 ## License
 

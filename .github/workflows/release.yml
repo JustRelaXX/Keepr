@@ -142,7 +142,7 @@ jobs:
           {
             echo "## AUR update for keepr-bin (${GITHUB_REF_NAME})"
             echo ""
-            echo "In the AUR repo, set in \`PKGBUILD\` and regenerate \`.SRCINFO\` (see \`dist/aur/README.md\`):"
+            echo "In the AUR repo, set in \`PKGBUILD\` and regenerate \`.SRCINFO\` (see \`packaging/aur/README.md\`):"
             echo ""
             echo '```'
             echo "pkgver=${TAG}"

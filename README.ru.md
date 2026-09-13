@@ -113,7 +113,7 @@ KEEPR_BINARY=target/release/keepr npm run test:e2e  # проверка рели�
 - `src-tauri/` — IPC-команды, tray, уведомления, автозапуск, фон.
 - `resources/` — общие RU/EN-строки, пресеты, артворк.
 - `docs/` — архитектура, платформы, QA, release notes.
-- `dist/aur/` — исходники AUR-пакета (`keepr-bin`).
+- `packaging/aur/` — исходники AUR-пакета (`keepr-bin`).
 
 ## Лицензия
 
